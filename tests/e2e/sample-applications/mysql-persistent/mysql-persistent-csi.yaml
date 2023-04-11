@@ -76,6 +76,9 @@ items:
           - image: registry.redhat.io/rhel8/mariadb-105:latest
             name: mysql
             securityContext:
+              runAsUser: 1000
+              runAsGroup: 1000
+              fsGroup: 1000
               privileged: true
             env:
               - name: MYSQL_USER

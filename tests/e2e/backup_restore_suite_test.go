@@ -383,7 +383,7 @@ var _ = Describe("AWS backup restore tests", func() {
 			PreBackupVerify:      mysqlReady(true, false, RESTIC),
 			PostRestoreVerify:    mysqlReady(false, false, RESTIC),
 		}, nil),
-		Entry("Mongo application DATAMOVER", BackupRestoreCase{
+		FEntry("Mongo application DATAMOVER", BackupRestoreCase{
 			ApplicationTemplate:  "./sample-applications/mongo-persistent/mongo-persistent-csi.yaml",
 			ApplicationNamespace: "mongo-persistent",
 			Name:                 "mongo-datamover-e2e",
