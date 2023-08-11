@@ -22,6 +22,15 @@ func (r *DPAReconciler) ValidateDataProtectionCR(log logr.Logger) (bool, error) 
 	if dpa.Spec.Configuration == nil || dpa.Spec.Configuration.Velero == nil {
 		return false, errors.New("DPA CR Velero configuration cannot be nil")
 	}
+	if dpa.Spec.Configuration.Restic.Enable != nil && *dpa.Spec.Configuration.Restic.Enable {
+		if dpa.Spec.Configuration.Velero.Args == nil || dpa.Spec.Configuration.Velero.Args.RestoreResourcePriorities == "" {
+			return false, errors.New("restoreresourcerriorities flag is required when restic is enabled")
+		}
+		restoreResourceList := dpa.Spec.Configuration.Velero.Args.RestoreResourcePriorities
+		if strings.Contains(restoreResourceList, "ServiceAccount") && strings.Contains(restoreResourceList, "SecurityContextConstraints") {
+			return false, errors.New("ServiceAccount and SecurityContextConstraints are minimum required resources comma seprated")
+		}
+	}
 
 	if dpa.Spec.Configuration.Velero.NoDefaultBackupLocation {
 		if len(dpa.Spec.BackupLocations) != 0 {
